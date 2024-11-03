@@ -2,31 +2,31 @@ kind: pipeline
 name: drone-test
 
 steps:
-- name: setup-python
+  - name: setup-python
     image: python:3.8.7
     commands:
-        - python -m venv /drone/src/venv
-        - . /drone/src/venv/bin/activate
-        - pip install -U pip setuptools flake8
+      - python -m venv /drone/src/venv
+      - . /drone/src/venv/bin/activate
+      - pip install -U pip setuptools flake8
     volumes:
       - name: venv_cache
         path: /drone/src/venv
 
-- name: lint
+  - name: lint
     image: python:3.8.7
     commands:
-        - . /drone/src/venv/bin/activate
-        - cd src
-        - flake8 .
+      - . /drone/src/venv/bin/activate
+      - cd src
+      - flake8 .
     volumes:
-        - name: venv_cache
-          path: /drone/src/venv
+      - name: venv_cache
+        path: /drone/src/venv
     when:
-        event:
+      event:
         - push
         - pull_request
 
 volumes:
-- name: venv_cache
+  - name: venv_cache
     host:
-    path: /tmp/cache/drone/venv
+      path: /tmp/cache/drone/venv
